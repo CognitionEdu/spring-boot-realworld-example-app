@@ -30,9 +30,20 @@ configurations {
     }
     all {
         resolutionStrategy {
-            force 'org.codehaus.groovy:groovy:3.0.9'
-            force 'org.codehaus.groovy:groovy-xml:3.0.9'
-            force 'org.codehaus.groovy:groovy-json:3.0.9'
+            capabilitiesResolution {
+                withCapability('org.codehaus.groovy:groovy') {
+                    select('org.codehaus.groovy:groovy:3.0.9')
+                }
+                withCapability('org.codehaus.groovy:groovy-xml') {
+                    select('org.codehaus.groovy:groovy-xml:3.0.9')
+                }
+                withCapability('org.codehaus.groovy:groovy-json') {
+                    select('org.codehaus.groovy:groovy-json:3.0.9')
+                }
+            }
+            force 'org.apache.groovy:groovy:4.0.15'
+            force 'org.apache.groovy:groovy-xml:4.0.15'
+            force 'org.apache.groovy:groovy-json:4.0.15'
         }
     }
 }
@@ -54,10 +65,10 @@ dependencies {
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
 
-    testImplementation 'io.rest-assured:rest-assured:4.5.1'
-    testImplementation 'io.rest-assured:json-path:4.5.1'
-    testImplementation 'io.rest-assured:xml-path:4.5.1'
-    testImplementation 'io.rest-assured:spring-mock-mvc:4.5.1'
+    testImplementation 'io.rest-assured:rest-assured'
+    testImplementation 'io.rest-assured:json-path'
+    testImplementation 'io.rest-assured:xml-path'
+    testImplementation 'io.rest-assured:spring-mock-mvc'
     testImplementation 'org.springframework.security:spring-security-test'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter-test:3.0.0'
