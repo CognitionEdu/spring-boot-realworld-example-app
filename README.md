@@ -44,7 +44,7 @@ It uses a ~~H2 in-memory database~~ sqlite database (for easy local test without
 
 # Getting started
 
-You'll need Java 11 installed.
+You'll need Java 11 or higher installed.
 
     ./gradlew bootRun
 
@@ -52,6 +52,10 @@ To test that it works, open a browser tab at http://localhost:8080/tags .
 Alternatively, you can run
 
     curl http://localhost:8080/tags
+
+## Java Version Migration
+
+This project has been migrated from Java 8 to Java 11. For details about the migration process and changes made, see [MIGRATION_NOTES.md](MIGRATION_NOTES.md).
 
 # Try it out with [Docker](https://www.docker.com/)
 
