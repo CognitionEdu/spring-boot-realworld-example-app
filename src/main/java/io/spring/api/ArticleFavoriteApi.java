@@ -1,6 +1,7 @@
 package io.spring.api;
 
 import io.spring.api.exception.ResourceNotFoundException;
+import io.spring.api.response.ArticleResponse;
 import io.spring.application.ArticleQueryService;
 import io.spring.application.data.ArticleData;
 import io.spring.core.article.Article;
@@ -8,7 +9,6 @@ import io.spring.core.article.ArticleRepository;
 import io.spring.core.favorite.ArticleFavorite;
 import io.spring.core.favorite.ArticleFavoriteRepository;
 import io.spring.core.user.User;
-import java.util.HashMap;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -50,13 +50,7 @@ public class ArticleFavoriteApi {
     return responseArticleData(articleQueryService.findBySlug(slug, user).get());
   }
 
-  private ResponseEntity<HashMap<String, Object>> responseArticleData(
-      final ArticleData articleData) {
-    return ResponseEntity.ok(
-        new HashMap<String, Object>() {
-          {
-            put("article", articleData);
-          }
-        });
+  private ResponseEntity<ArticleResponse> responseArticleData(final ArticleData articleData) {
+    return ResponseEntity.ok(new ArticleResponse(articleData));
   }
 }

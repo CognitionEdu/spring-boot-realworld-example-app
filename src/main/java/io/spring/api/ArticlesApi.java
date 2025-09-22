@@ -1,13 +1,13 @@
 package io.spring.api;
 
+import io.spring.api.response.ArticleResponse;
 import io.spring.application.ArticleQueryService;
 import io.spring.application.Page;
 import io.spring.application.article.ArticleCommandService;
 import io.spring.application.article.NewArticleParam;
 import io.spring.core.article.Article;
 import io.spring.core.user.User;
-import java.util.HashMap;
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -26,15 +26,11 @@ public class ArticlesApi {
   private ArticleQueryService articleQueryService;
 
   @PostMapping
-  public ResponseEntity createArticle(
+  public ResponseEntity<ArticleResponse> createArticle(
       @Valid @RequestBody NewArticleParam newArticleParam, @AuthenticationPrincipal User user) {
     Article article = articleCommandService.createArticle(newArticleParam, user);
     return ResponseEntity.ok(
-        new HashMap<String, Object>() {
-          {
-            put("article", articleQueryService.findById(article.getId(), user).get());
-          }
-        });
+        new ArticleResponse(articleQueryService.findById(article.getId(), user).get()));
   }
 
   @GetMapping(path = "feed")

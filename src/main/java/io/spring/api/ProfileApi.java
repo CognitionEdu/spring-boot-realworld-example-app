@@ -1,12 +1,12 @@
 package io.spring.api;
 
 import io.spring.api.exception.ResourceNotFoundException;
+import io.spring.api.response.ProfileResponse;
 import io.spring.application.ProfileQueryService;
 import io.spring.application.data.ProfileData;
 import io.spring.core.user.FollowRelation;
 import io.spring.core.user.User;
 import io.spring.core.user.UserRepository;
-import java.util.HashMap;
 import java.util.Optional;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -67,12 +67,7 @@ public class ProfileApi {
     }
   }
 
-  private ResponseEntity profileResponse(ProfileData profile) {
-    return ResponseEntity.ok(
-        new HashMap<String, Object>() {
-          {
-            put("profile", profile);
-          }
-        });
+  private ResponseEntity<ProfileResponse> profileResponse(ProfileData profile) {
+    return ResponseEntity.ok(new ProfileResponse(profile));
   }
 }
