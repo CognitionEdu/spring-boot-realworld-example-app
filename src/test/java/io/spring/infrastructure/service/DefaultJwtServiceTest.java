@@ -13,7 +13,8 @@ public class DefaultJwtServiceTest {
 
   @BeforeEach
   public void setUp() {
-    jwtService = new DefaultJwtService("123123123123123123123123123123123123123123123123123123123123", 3600);
+    String testSecret = "test-secret-key-for-jwt-testing-only-not-for-production-use-minimum-64-chars";
+    jwtService = new DefaultJwtService(testSecret, 3600);
   }
 
   @Test
