@@ -1,0 +1,28 @@
+request:
+  httpHeaders:
+    Authorization: "Token jwt-token-here"
+  body: |
+    query {
+      feed(first: 10) {
+        edges {
+          node {
+            slug
+            title
+            description
+            author {
+              username
+            }
+          }
+        }
+      }
+    }
+response:
+  data:
+    feed:
+      edges:
+        - node:
+            slug: "sample-article"
+            title: "Sample Article"
+            description: "This is a sample article"
+            author:
+              username: "testuser"

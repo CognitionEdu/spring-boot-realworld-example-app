@@ -70,3 +70,21 @@ tasks.named('generateJava') {
     schemaPaths = ["${projectDir}/src/main/resources/schema"] // List of directories containing schema files
     packageName = 'io.spring.graphql' // The package name to use to generate sources
 }
+
+task startContractTestApp(type: JavaExec) {
+    group = 'contract-testing'
+    description = 'Starts the contract test application with GraphQL endpoint'
+    classpath = sourceSets.test.runtimeClasspath
+    main = 'io.spring.contract.ContractTestApp'
+    args = ['--server.port=8081']
+}
+
+task runGraphQLContractTests(type: Exec) {
+    group = 'contract-testing'
+    description = 'Runs Specmatic GraphQL contract tests'
+    commandLine 'docker', 'run', '--rm', '--network=host',
+                '-v', "${projectDir}/src/test/contract/provider:/contracts",
+                '-v', "${projectDir}/src/test/contract/provider/specmatic.yaml:/usr/src/app/specmatic.yaml",
+                'specmatic/specmatic-graphql:latest',
+                'test', '--host=localhost', '--port=8081', '/contracts/realworld-api.graphql'
+}
