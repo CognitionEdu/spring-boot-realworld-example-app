@@ -1,2 +1,3 @@
 sources:
-  - provider: /contracts/realworld-api.graphql
+  - provider: filesystem
+    repository: /contracts/realworld-api.graphql
