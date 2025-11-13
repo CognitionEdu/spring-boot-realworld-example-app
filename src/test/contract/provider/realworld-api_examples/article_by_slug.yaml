@@ -1,0 +1,20 @@
+request:
+  body: |
+    query {
+      article(slug: "sample-article") {
+        slug
+        title
+        description
+        author {
+          username
+        }
+      }
+    }
+response:
+  data:
+    article:
+      slug: "sample-article"
+      title: "Sample Article"
+      description: "This is a sample article"
+      author:
+        username: "testuser"

@@ -1,0 +1,24 @@
+request:
+  body: |
+    mutation {
+      createUser(input: {
+        username: "newuser"
+        email: "newuser@example.com"
+        password: "password123"
+      }) {
+        user {
+          username
+          email
+          bio
+          image
+        }
+      }
+    }
+response:
+  data:
+    createUser:
+      user:
+        username: "newuser"
+        email: "newuser@example.com"
+        bio: ""
+        image: ""
