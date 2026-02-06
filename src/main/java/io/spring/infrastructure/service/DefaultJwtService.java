@@ -4,8 +4,11 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
 import io.spring.core.service.JwtService;
 import io.spring.core.user.User;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
 import java.util.Date;
 import java.util.Optional;
 import javax.crypto.SecretKey;
@@ -25,7 +28,22 @@ public class DefaultJwtService implements JwtService {
       @Value("${jwt.secret}") String secret, @Value("${jwt.sessionTime}") int sessionTime) {
     this.sessionTime = sessionTime;
     signatureAlgorithm = SignatureAlgorithm.HS512;
-    this.signingKey = new SecretKeySpec(secret.getBytes(), signatureAlgorithm.getJcaName());
+    this.signingKey = createSecretKey(secret);
+  }
+
+  private SecretKey createSecretKey(String secret) {
+    try {
+      MessageDigest digest = MessageDigest.getInstance("SHA-256");
+      byte[] hash = digest.digest(secret.getBytes(StandardCharsets.UTF_8));
+      byte[] keyBytes = new byte[64]; // 512 bits for HS512
+      System.arraycopy(hash, 0, keyBytes, 0, Math.min(hash.length, keyBytes.length));
+      if (hash.length < keyBytes.length) {
+        System.arraycopy(hash, 0, keyBytes, hash.length, keyBytes.length - hash.length);
+      }
+      return new SecretKeySpec(keyBytes, signatureAlgorithm.getJcaName());
+    } catch (Exception e) {
+      throw new RuntimeException("Failed to create JWT signing key", e);
+    }
   }
 
   @Override
@@ -41,7 +59,7 @@ public class DefaultJwtService implements JwtService {
   public Optional<String> getSubFromToken(String token) {
     try {
       Jws<Claims> claimsJws =
-          Jwts.parserBuilder().setSigningKey(signingKey).build().parseClaimsJws(token);
+          Jwts.parser().verifyWith(signingKey).build().parseSignedClaims(token);
       return Optional.ofNullable(claimsJws.getBody().getSubject());
     } catch (Exception e) {
       return Optional.empty();
